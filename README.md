@@ -11,7 +11,7 @@ The code in this repository is for a group project & personal extra credit submi
 
 2. `cd amazon-awesomeness-predictor`.
 
-3. `tar -xf data/Test.tar.gz` and `tar -xf data/Test.tar.gz`; this should extract `full_train.csv` and `Test.csv` into the same directory as `main.py`.
+3. `tar -xf data/Test.tar.gz` and `tar -xf data/full_train.tar.gz`; this should extract `full_train.csv` and `Test.csv` into the same directory as `main.py`.
 
 4. Run `main.py` with `full_train.csv` and `Test.csv` in the same directory to see the final model's performance (precision, recall, F-1) in each of the 10 folds. Change the third param in `main.py` from `xgb10` to `predict` then rerun to produce the predictions CSV file for test data in `Test.csv` using the final model. The output file is formatted as follows: 1st column - automatic indexing by Pandas; 2nd column - Amazon product ID; 3rd column - Awesomeness.
 
