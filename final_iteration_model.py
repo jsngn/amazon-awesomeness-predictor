@@ -39,7 +39,7 @@ class FinalIterationModel:
 
         if mode == 'predict':
             FinalIterationModel.train_and_predict(FinalIterationModel.preprocess(self.train),
-                                                  FinalIterationModel.preprocess(self.test))
+                                                  FinalIterationModel.preprocess(self.test, True))
         elif mode == 'xgb10':
             scores = self.get_predictions_from_train(FinalIterationModel.preprocess(self.train), 10)
             print(scores)
@@ -51,11 +51,12 @@ class FinalIterationModel:
             FinalIterationModel.tune_booster(FinalIterationModel.preprocess(self.train), 'ada')
 
     @staticmethod
-    def preprocess(df):
+    def preprocess(df, test_file=False):
         """
         Performs all preprocessing necessary for this iteration of our model; only columns we need are reviewText,
         summary, root-genre, and related. We do all processing and engineering here.
         :param df: DataFrame to be processed
+        :param test_file: whether df is unseen Test.csv
         :return: processed DataFrame
         """
         df.drop('first-release-year', axis=1, inplace=True)
@@ -95,7 +96,10 @@ class FinalIterationModel:
         df_avg_review = df.groupby('amazon-id', as_index=False)['review_compound'].mean()
 
         # drop all other cols effectively
-        chosen_cols = df[['amazon-id', 'related', 'root-genre', 'target']]
+        if test_file:
+            chosen_cols = df[['amazon-id', 'related', 'root-genre']]
+        else:
+            chosen_cols = df[['amazon-id', 'related', 'root-genre', 'target']]
         chosen_cols = chosen_cols.drop_duplicates(subset=['amazon-id'])
 
         final_df = pd.merge(chosen_cols, df_concat_text, on='amazon-id')
